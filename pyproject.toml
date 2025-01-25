@@ -1,0 +1,22 @@
+[project]
+name = "hatiko-test"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiogram>=3.17.0",
+    "fastapi>=0.115.7",
+    "pydantic-settings>=2.7.1",
+    "uvicorn[stantard]>=0.34.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.14.1",
+    "ruff>=0.9.1",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
