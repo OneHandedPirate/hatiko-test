@@ -53,7 +53,7 @@ https://imeicheck.net/
 git clone https://github.com/OneHandedPirate/hatiko-test.git
 cd hatiko-test
 uv sync --no-dev
-cp .env.example > .env
+touch .env
 ```
 
 В файле `.env` прописать следующие переменные:
