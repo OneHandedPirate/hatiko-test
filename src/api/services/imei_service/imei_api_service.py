@@ -2,7 +2,7 @@ import logging
 
 import aiohttp
 
-from src.api.services.imei_service.exceptions import ImeiApiBaseException
+from src.api.services.imei_service.exceptions import ImeiApiBaseException, InvalidImei
 from src.api.services.imei_service.schemas import ImeiCheckServiceSchema
 from src.core.config import settings
 
@@ -28,8 +28,11 @@ class ImeiCheckApiService:
                     f"{settings.imei_api.url}/v1/checks", headers=headers, json=body
                 )
 
+                if res.status == 422:
+                    raise InvalidImei("‼ Некорректный IMEI ‼")
+
                 if res.status != 201:
-                    raise ImeiApiBaseException("Некорректный статус ответа от API")
+                    raise ImeiApiBaseException()
 
                 return await res.json()
         except Exception as e:
@@ -38,7 +41,13 @@ class ImeiCheckApiService:
                 str(e),
                 exc_info=True,
             )
-            raise ImeiApiBaseException()
+
+            if isinstance(e, InvalidImei):
+                raise e
+            elif isinstance(e, ImeiApiBaseException):
+                raise e
+            else:
+                raise ImeiApiBaseException()
 
 
 def get_imei_api_service() -> ImeiCheckApiService:

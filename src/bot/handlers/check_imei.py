@@ -55,10 +55,19 @@ async def input_imei(message: types.Message, state: FSMContext):
                 json=body,
             )
 
+            json_response = await res.json()
+
+            if res.status == 400:
+                await new_message.edit_text(
+                    json_response.get("detail"),
+                    reply_markup=Keyboards.get_after_check_kbd(),
+                )
+                await state.clear()
+                return
+
             if res.status != 200:
                 raise Exception("Invalid API response")
 
-            json_response = await res.json()
 
             await new_message.edit_text(
                 f"Информация:\n\n"
